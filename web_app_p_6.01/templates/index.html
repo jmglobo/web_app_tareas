@@ -1,0 +1,79 @@
+<!-- ESTRUCTURA DE LA WEB-->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>App Gestor de Tareas</title>
+        
+        <!--Referencia a hoja de estilo CSS-->
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <!--Referencia a hoja de estilo BOOTSWATCH-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+        <!--Fuente Google Fonts (necesario tambien meter codigo de Google Fonts en fichero CSS)-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet"> 
+
+    </head>
+
+
+
+    <body>
+        <h1 class="text-center mt-4 titulo">APP DE GESTIÓN DE TAREAS</h1> 
+
+        <div class="row">
+            <div class="col-md-4 offset-md-4 my-auto">
+                <div class="card"></div>
+
+                    <!--CABECERA DE LA TARJETA-->
+                    <div class="card-header">
+                        <form action="/crear-tarea" method="post">
+                            <div class="form-group">
+                                <input type="text" name="contenido_tarea" placeholder="Tarea" class="form-control" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="categoria" placeholder="Categoria" class="form-control" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="fecha_limite" placeholder="Fecha Limite" class="form-control" autofocus>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                        </form>
+                    </div>
+                    
+                    <!--CUERPO DE LA TARJETA-->
+                    <div class="card-body">
+                        <ul>
+                            {% for tarea in lista_tareas: %}
+                            <li>
+                                <span class="{% if tarea.tarea_hecha==true %} tarea_hecha {% endif %}">
+                                    TAREA: {{tarea.contenido_tarea}}<br>
+                                    <br> 
+                                    Categoría: {{tarea.categoria}}<br>
+                                    Fecha límite: {{tarea.fecha_limite}}<br>
+                                    Fecha y hora creación: {{tarea.hora}}<br>
+                                </span>
+                                <a href="/tarea-hecha/{{tarea.id_tarea}}" style="text-decoration: none" class="btn btn-success btn-sm">Hecho</a>
+                                <a href="/eliminar-tarea/{{tarea.id_tarea}}" style="text-decoration: none" class="btn btn-danger btn-sm">Eliminar</a>
+                                <form action="/editar-tarea/{{ tarea.id_tarea }}" method="post">
+                                        <div class="form">
+                                            <input type="text" name="nuevo_contenido_tarea" placeholder="Tarea" class="form" autofocus>
+                                        </div>
+                                        <div class="form">
+                                            <input type="text" name="nueva_categoria" placeholder="Categoria" class="form" autofocus>
+                                        </div>
+                                        <div class="form">
+                                            <input type="text" name="nueva_fecha_limite" placeholder="Fecha Limite" class="form" autofocus>
+                                        </div>
+                                        <button type="submit" name="editar_tarea" value="{{tarea.id_tarea}}" style="text-decoration: none" class="btn btn-warning btn-sm">Editar tarea</button>   
+                                </form>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
+        </div>
+    </body>
+</html>
+
